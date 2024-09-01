@@ -1,0 +1,30 @@
+<%- include("../partials/header.ejs") %> <%- include("../partials/navbar.ejs")
+%>
+<div class="container">
+  <div class="card" style="width: 18rem">
+    <img src="<%= campground.image %>" class="card-img-top" alt="..." />
+    <div class="card-body">
+      <h5 class="card-title"><%= campground.title %></h5>
+      <h6 class="card-subtitle mb-2 text-body-secondary">
+        <%= campground.location %>
+      </h6>
+      <p class="card-text"><%= campground.description %></p>
+    </div>
+    <ul class="list-group list-group-flush">
+      <li class="list-group-item"><%= campground.price %></li>
+    </ul>
+    <div class="card-body row">
+      <a href="/campgrounds/<%= campground._id %>/edit" class="card-link col-5"
+        >Edit</a
+      >
+      <form
+        class="col-5"
+        action="/campgrounds/<%= campground._id %>?_method=DELETE"
+        method="post"
+      >
+        <button type="submit">Delete</button>
+      </form>
+    </div>
+  </div>
+</div>
+<%- include("../partials/bottom.ejs") %>
