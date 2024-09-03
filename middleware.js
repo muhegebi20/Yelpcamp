@@ -28,3 +28,38 @@ module.exports.validated = checkSchema({
     },
   },
 });
+module.exports.isValid = checkSchema({
+  username: {
+    trim: true,
+    notEmpty: {
+      errorMessage: "username can't be empty",
+    },
+  },
+  email: {
+    trim: true,
+    notEmpty: {
+      errorMessage: "Email can't be empty",
+    },
+    isEmail: {
+      errorMessage: "please use valid email address",
+    },
+  },
+  password: {
+    trim: true,
+    isString: true,
+    notEmpty: {
+      errorMessage: "Password can't be empty",
+    },
+    optional: {
+      min: 8,
+    },
+  },
+});
+
+module.exports.isLoggedIn = (req, res, next) => {
+  if (req.isAuthenticated()) {
+    console.log(req.user);
+    res.locals.currentUser = req.user;
+  }
+  next();
+};

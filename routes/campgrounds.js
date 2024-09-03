@@ -19,6 +19,7 @@ router.post("/", validated, async (req, res) => {
   let camp = new Campground(req.body);
   try {
     let saved = await camp.save();
+    req.flash("success", "successfully created new camp");
     res.redirect(`/campgrounds/${camp._id}`);
   } catch (error) {
     console.log(error);
@@ -46,8 +47,8 @@ router.get("/:id", async (req, res) => {
   res.render("campgrounds/show", { campground });
 });
 router.delete("/:id", async (req, res) => {
-  let { id } = req;
-  await Campground.findOneAndDelete(id);
+  let { id } = req.params;
+  await Campground.findByIdAndDelete(id);
   res.redirect(`/campgrounds/`);
 });
 

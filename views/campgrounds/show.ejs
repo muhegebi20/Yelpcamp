@@ -1,5 +1,6 @@
 <%- include("../partials/header.ejs") %> <%- include("../partials/navbar.ejs")
 %>
+<div class="my-3"><%= success %></div>
 <div class="container">
   <div class="card" style="width: 18rem">
     <img src="<%= campground.image %>" class="card-img-top" alt="..." />
@@ -20,7 +21,7 @@
       <form
         class="col-5"
         action="/campgrounds/<%= campground._id %>?_method=DELETE"
-        method="post"
+        method="POST"
       >
         <button type="submit">Delete</button>
       </form>
