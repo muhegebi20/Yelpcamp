@@ -1,30 +1,77 @@
 <%- include("../partials/header.ejs") %> <%- include("../partials/navbar.ejs")
 %>
-<div class="my-3"><%= success %></div>
+<div class="container"><%- include("../partials/flash.ejs") %></div>
 <div class="container">
-  <div class="card" style="width: 18rem">
-    <img src="<%= campground.image %>" class="card-img-top" alt="..." />
-    <div class="card-body">
-      <h5 class="card-title"><%= campground.title %></h5>
-      <h6 class="card-subtitle mb-2 text-body-secondary">
-        <%= campground.location %>
-      </h6>
-      <p class="card-text"><%= campground.description %></p>
+  <div class="row">
+    <div class="card col-4">
+      <img src="<%= campground.image %>" class="card-img-top" alt="..." />
+      <div class="card-body">
+        <h5 class="card-title"><%= campground.title %></h5>
+        <h6 class="card-subtitle mb-2 text-body-secondary">
+          <%= campground.location %>
+        </h6>
+        <p class="card-text"><%= campground.description %></p>
+      </div>
+      <ul class="list-group list-group-flush">
+        <li class="list-group-item"><%= campground.price %></li>
+        <li class="list-group-item">
+          Created by: <%= campground.author.username %>
+        </li>
+      </ul>
+      <div class="card-body row">
+        <a
+          href="/campgrounds/<%= campground._id %>/edit"
+          class="card-link col-5"
+          >Edit</a
+        >
+        <form
+          class="col-5"
+          action="/campgrounds/<%= campground._id %>?_method=DELETE"
+          method="POST"
+        >
+          <button type="submit">Delete</button>
+        </form>
+      </div>
     </div>
-    <ul class="list-group list-group-flush">
-      <li class="list-group-item"><%= campground.price %></li>
-    </ul>
-    <div class="card-body row">
-      <a href="/campgrounds/<%= campground._id %>/edit" class="card-link col-5"
-        >Edit</a
-      >
-      <form
-        class="col-5"
-        action="/campgrounds/<%= campground._id %>?_method=DELETE"
-        method="POST"
-      >
-        <button type="submit">Delete</button>
+    <div class="p-2 mx-2 col-4">
+      <form action="/campgrounds/<%= campground._id %>/reviews" method="post">
+        <div>
+          <label for="customRange2" class="form-label">Rate</label>
+          <input
+            type="range"
+            name="rating"
+            class="form-range"
+            min="0"
+            max="5"
+            id="customRange2"
+          />
+        </div>
+        <div class="form-floating">
+          <textarea
+            class="form-control"
+            placeholder="Leave a comment here"
+            id="floatingTextarea2"
+            style="height: 100px"
+            name="body"
+          ></textarea>
+          <label for="floatingTextarea2">Comments</label>
+        </div>
+        <div class="buttons my-3">
+          <button type="submit" class="btn btn-primary btn-sm">Comment</button>
+        </div>
       </form>
+      <% if(campground.review) {%> <% for(review of campground.review) {%>
+      <div class="card my-2 p-2">
+        <h6>Rating: <%= review.rating %></h6>
+        <p><%= review.body%></p>
+        <form
+          action="/campgrounds/<%= campground._id %>/reviews/<%= review._id %>?_method=DELETE"
+          method="post"
+        >
+          <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+        </form>
+      </div>
+      <% } %> <% } %>
     </div>
   </div>
 </div>

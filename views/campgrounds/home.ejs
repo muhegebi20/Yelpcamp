@@ -3,7 +3,7 @@
 <div class="container">
   <h1>All Campgrouns</h1>
 </div>
-<div class="my-3"><%= success %></div>
+<%- include("../partials/flash.ejs") %>
 <div class="container">
   <% for(let camp of camps) { %>
   <div class="row mb-3 border border-dark rounded py-2">

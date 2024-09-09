@@ -1,23 +1,24 @@
 const express = require("express");
 const router = express.Router({ mergeParams: false });
 const Campground = require("../models/campground");
-const { validated } = require("../middleware");
+const { validated, isLoggedIn } = require("../middleware");
 const { validationResult } = require("express-validator");
 
-router.get("/new", (req, res) => {
+router.get("/new", isLoggedIn, (req, res) => {
   res.render("campgrounds/new");
 });
 router.get("/", async (req, res) => {
   let camps = await Campground.find({});
   res.render("campgrounds/home", { camps });
 });
-router.post("/", validated, async (req, res) => {
+router.post("/", validated, isLoggedIn, async (req, res) => {
   let result = validationResult(req);
   if (!result.isEmpty()) {
     return res.send({ error: result.array() });
   }
   let camp = new Campground(req.body);
   try {
+    camp.author = req.user;
     let saved = await camp.save();
     req.flash("success", "successfully created new camp");
     res.redirect(`/campgrounds/${camp._id}`);
@@ -25,12 +26,12 @@ router.post("/", validated, async (req, res) => {
     console.log(error);
   }
 });
-router.get("/:id/edit", async (req, res) => {
+router.get("/:id/edit", isLoggedIn, async (req, res) => {
   let { id } = req.params;
   let campground = await Campground.findById(id);
   res.render("campgrounds/edit", { campground });
 });
-router.put("/:id", validated, async (req, res) => {
+router.put("/:id", validated, isLoggedIn, async (req, res) => {
   let result = validationResult(req);
   if (!result.isEmpty()) {
     return res.send({ error: result.array() });
@@ -43,10 +44,12 @@ router.put("/:id", validated, async (req, res) => {
 });
 router.get("/:id", async (req, res) => {
   let { id } = req.params;
-  let campground = await Campground.findById(id);
+  let campground = await Campground.findById(id)
+    .populate("author")
+    .populate("review");
   res.render("campgrounds/show", { campground });
 });
-router.delete("/:id", async (req, res) => {
+router.delete("/:id", isLoggedIn, async (req, res) => {
   let { id } = req.params;
   await Campground.findByIdAndDelete(id);
   res.redirect(`/campgrounds/`);

@@ -57,9 +57,10 @@ module.exports.isValid = checkSchema({
 });
 
 module.exports.isLoggedIn = (req, res, next) => {
-  if (req.isAuthenticated()) {
-    console.log(req.user);
-    res.locals.currentUser = req.user;
+  if (!req.isAuthenticated()) {
+    req.flash("error", "you must login first");
+    return res.redirect("/login");
   }
+  console.log("authenticated...");
   next();
 };

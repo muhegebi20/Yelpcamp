@@ -11,6 +11,7 @@ const flash = require("connect-flash");
 const passport = require("passport");
 const { Strategy } = require("./utils/local-strategy");
 const { isLoggedIn } = require("./middleware");
+const review = require("./routes/review");
 
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
@@ -35,21 +36,22 @@ app.use(
     },
   })
 );
-app.use(flash());
-app.use((req, res, next) => {
-  console.log(req.session);
-  res.locals.currentUser = req.user;
-  console.log("user:" + req.user);
-  res.locals.success = req.flash("success");
-  next();
-});
+
 app.use(passport.initialize());
 app.use(passport.session());
 
+app.use(flash());
+app.use((req, res, next) => {
+  res.locals.currentUser = req.user;
+  res.locals.success = req.flash("success");
+  res.locals.error = req.flash("error");
+  next();
+});
+
 //routes
-app.use(isLoggedIn);
 app.use("/campgrounds/", campground);
 app.use("/", userroute);
+app.use("/", review);
 
 app.listen(3000, () => {
   console.log("listening to the server...");
