@@ -10,10 +10,9 @@ let reviewSchema = new Schema({
     type: Number,
     required: true,
   },
-  user: {
+  author: {
     type: Schema.Types.ObjectId,
     ref: "User",
-    default: null,
   },
 });
 

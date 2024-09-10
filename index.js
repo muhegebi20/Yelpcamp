@@ -12,6 +12,7 @@ const passport = require("passport");
 const { Strategy } = require("./utils/local-strategy");
 const { isLoggedIn } = require("./middleware");
 const review = require("./routes/review");
+const ExpressError = require("./utils/ExpressError");
 
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
@@ -47,11 +48,20 @@ app.use((req, res, next) => {
   res.locals.error = req.flash("error");
   next();
 });
-
 //routes
 app.use("/campgrounds/", campground);
 app.use("/", userroute);
-app.use("/", review);
+app.use("/campgrounds/:id/reviews/", review);
+
+app.all("*", (req, res, next) => {
+  next(new ExpressError(400, "Page not found!"));
+});
+
+app.use((err, req, res, next) => {
+  const { status = 500 } = err;
+  if (!err.message) err.message = "Ohhh!, Something went wrong";
+  res.status(status).render("error", { err });
+});
 
 app.listen(3000, () => {
   console.log("listening to the server...");
