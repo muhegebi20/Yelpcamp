@@ -9,6 +9,7 @@ module.exports.createReview = async (req, res) => {
   review.author = req.user;
   await camp.save();
   await review.save();
+  req.flash("success", "Thank you for reviewing us!");
   res.redirect(`/campgrounds/${id}`);
 };
 module.exports.deleteReview = async (req, res) => {

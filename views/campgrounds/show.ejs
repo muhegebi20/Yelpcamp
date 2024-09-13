@@ -1,10 +1,14 @@
 <%- include("../partials/header.ejs") %> <%- include("../partials/navbar.ejs")
 %>
+<link rel="stylesheet" href="/star.css" />
+
 <div class="container my-3"><%- include("../partials/flash.ejs") %></div>
 <div class="container my-3">
   <div class="row">
     <div class="card col-4">
-      <img src="<%= campground.image %>" class="card-img-top" alt="..." />
+      <% for(img of campground.images) {%>
+      <img src="<%= img.url %>" class="card-img-top" alt="..." />
+      <% } %>
       <div class="card-body">
         <h5 class="card-title"><%= campground.title %></h5>
         <h6 class="card-subtitle mb-2 text-body-secondary">
@@ -38,19 +42,33 @@
         <% } %>
       </div>
     </div>
+    <!-- Review form  -->
     <div class="p-2 mx-2 col-4">
       <% if(currentUser) {%>
       <form action="/campgrounds/<%= campground._id %>/reviews" method="post">
-        <div>
-          <label for="customRange2" class="form-label">Rate</label>
-          <input
-            type="range"
-            name="rating"
-            class="form-range"
-            min="0"
-            max="5"
-            id="customRange2"
-          />
+        <div class="mb-3">
+          <fieldset class="starability-basic">
+            <legend>Rate Us:</legend>
+            <input
+              type="radio"
+              id="no-rate"
+              class="input-no-rate"
+              name="rating"
+              value="0"
+              checked
+              aria-label="No rating."
+            />
+            <input type="radio" id="first-rate1" name="rating" value="1" />
+            <label for="first-rate1" title="Terrible">1 star</label>
+            <input type="radio" id="first-rate2" name="rating" value="2" />
+            <label for="first-rate2" title="Not good">2 stars</label>
+            <input type="radio" id="first-rate3" name="rating" value="3" />
+            <label for="first-rate3" title="Average">3 stars</label>
+            <input type="radio" id="first-rate4" name="rating" value="4" />
+            <label for="first-rate4" title="Very good">4 stars</label>
+            <input type="radio" id="first-rate5" name="rating" value="5" />
+            <label for="first-rate5" title="Amazing">5 stars</label>
+          </fieldset>
         </div>
         <div class="form-floating">
           <textarea
@@ -69,7 +87,12 @@
       <% } %> <% if(campground.review) {%> <% for(review of campground.review)
       {%>
       <div class="card my-2 p-2">
-        <h6>Rating: <%= review.rating %></h6>
+        <p class="starability-result" data-rating="<%= review.rating%>">
+          Rated: 3 stars
+        </p>
+        <h5 class="card-subtitle mb-2 text-body-secondary">
+          <%= review.author.username%>
+        </h5>
         <p><%= review.body%></p>
         <% if(currentUser && review.author.equals(currentUser._id)) {%>
         <form

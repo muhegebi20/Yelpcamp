@@ -16,9 +16,16 @@ module.exports.createCampground = async (req, res) => {
   let camp = new Campground(req.body);
   try {
     camp.author = req.user;
+    const imageDetails = req.files.map((file) => {
+      return {
+        url: file.path, // The uploaded image URL in Cloudinary
+        filename: file.filename, // The name of the file in Cloudinary
+      };
+    });
+    camp.images = imageDetails;
     let saved = await camp.save();
     req.flash("success", "successfully created new camp");
-    res.redirect(`/campgrounds/${camp._id}`);
+    res.redirect(`/campgrounds/${saved._id}`);
   } catch (error) {
     console.log(error);
   }
@@ -34,7 +41,6 @@ module.exports.showCampground = async (req, res) => {
       },
     })
     .populate("author");
-  console.log(campground);
   res.render("campgrounds/show", { campground });
 };
 module.exports.renderEditForm = async (req, res) => {

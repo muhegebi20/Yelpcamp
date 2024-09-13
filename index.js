@@ -1,3 +1,8 @@
+if (process.env.NODE_ENV !== "production") {
+  require("dotenv").config();
+}
+console.log(process.env.SECRET_KEY);
+
 const express = require("express");
 const app = express();
 const path = require("path");
@@ -10,12 +15,12 @@ const session = require("express-session");
 const flash = require("connect-flash");
 const passport = require("passport");
 const { Strategy } = require("./utils/local-strategy");
-const { isLoggedIn } = require("./middleware");
 const review = require("./routes/review");
 const ExpressError = require("./utils/ExpressError");
 
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
+app.use(express.static(path.join(__dirname, "public")));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(methodOverride("_method"));

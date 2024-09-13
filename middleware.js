@@ -63,7 +63,6 @@ module.exports.isLoggedIn = (req, res, next) => {
     req.flash("error", "you must login first");
     return res.redirect("/login");
   }
-  console.log("authenticated...");
   next();
 };
 

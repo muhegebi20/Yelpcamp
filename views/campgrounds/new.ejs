@@ -4,14 +4,26 @@
   <h1 class="mb-3">Add new campground</h1>
   <div class="col-lg-3 col-sm-2"></div>
   <div class="col-lg-6 col-sm-10">
-    <form action="/campgrounds" method="post">
+    <form action="/campgrounds" method="post" enctype="multipart/form-data">
       <div class="mb-3">
         <label for="title" class="form-label">Title</label>
-        <input type="text" name="title" class="form-control" id="title" />
+        <input
+          type="text"
+          name="title"
+          class="form-control"
+          id="title"
+          required
+        />
       </div>
       <div class="mb-3">
         <label for="location" class="form-label">location</label>
-        <input type="text" name="location" class="form-control" id="location" />
+        <input
+          type="text"
+          name="location"
+          class="form-control"
+          id="location"
+          required
+        />
       </div>
       <div class="mb-3">
         <label for="floatingTextarea" class="form-label">description</label>
@@ -21,11 +33,23 @@
           rows="5"
           class="form-control"
           id="floatingTextarea"
+          required
         ></textarea>
       </div>
       <div class="mb-3">
         <label for="price" class="form-label">price</label>
         <input type="number" name="price" class="form-control" id="price" />
+      </div>
+      <div class="mb-3">
+        <label for="image" class="form-label">Upload image</label>
+        <input
+          type="file"
+          name="images"
+          class="form-control"
+          id="image"
+          required
+          multiple
+        />
       </div>
       <div class="mb-3">
         <button class="btn btn-primary" type="submit">Submit</button>

@@ -19,11 +19,12 @@ const campgroundSchema = new Schema({
     type: Number,
     required: true,
   },
-  image: {
-    type: String,
-    default:
-      "https://newhampshirestateparks.reserveamerica.com/webphotos/NH/pid270015/0/540x360.jpg",
-  },
+  images: [
+    {
+      url: String,
+      filename: String,
+    },
+  ],
   author: {
     type: Schema.Types.ObjectId,
     ref: "User",
