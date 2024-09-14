@@ -54,6 +54,9 @@ app.use((req, res, next) => {
   next();
 });
 //routes
+app.get("/", (req, res) => {
+  res.redirect("/campgrounds");
+});
 app.use("/campgrounds/", campground);
 app.use("/", userroute);
 app.use("/campgrounds/:id/reviews/", review);
